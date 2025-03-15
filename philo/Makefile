@@ -1,6 +1,18 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/03/15 11:41:59 by ien-niou          #+#    #+#              #
+#    Updated: 2025/03/15 11:41:59 by ien-niou         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = philo
 CC = cc 
-FLAGS = -Wall -Wextra -Werror # -g -fsanitize=thread -pthread 
+FLAGS = -Wall -Wextra -Werror
 
 GREEN = \033[0;32m
 YELLOW = \033[0;33m
@@ -11,7 +23,7 @@ RESET = \033[0m
 HEADERS = philo.h
 MAIN = philo.c
 
-SRC = atoi.c validInput.c
+SRC = atoi.c validInput.c inits.c actions.c utils.c
 OBJS = $(SRC:.c=.o)
 
 all: $(NAME)
