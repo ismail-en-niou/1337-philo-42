@@ -33,7 +33,9 @@ $(NAME): $(MAIN) $(OBJS)
 	@echo "$(GREEN)Compilation successful!$(RESET)"
 
 %.o: %.c $(HEADERS)
+	@echo "\033[0;36m"
 	$(CC) $(FLAGS) -c $< -o $@
+	clear 
 
 clean:
 	@rm -rf $(OBJS)

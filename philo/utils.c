@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:42:36 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/15 11:45:14 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/16 08:08:59 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_sleep(size_t time, t_data *dt)
 	{
 		if (dt->simulation_end)
 			return (0);
-		ft_sleep(200 / 1000, dt);
+		usleep(100);
 	}
 	return (1);
 }

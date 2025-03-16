@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:40:43 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/15 11:41:55 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/16 08:17:31 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	print_state(t_philo *philo, char *state)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
 	if (!philo->data->simulation_end)
-		printf("%ld %ld %s\n", get_time_in_ms() - philo->data->start_time,
-			philo->id + 1, state);
+		printf("\033[0;32m%ld\033[0m \033[0;36m%ld\033[0m \033[0;33m%s\033[0m\n",
+			get_time_in_ms() - philo->data->start_time, philo->id + 1, state);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:33:48 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/15 11:33:48 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/16 08:14:13 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 static int	check_philosopher_death(t_philo **philos, size_t i)
 {
 	if (get_time_in_ms()
-		- philos[i]->last_meal_time > philos[i]->data->time_to_die
+		- philos[i]->last_meal_time > philos[i]->data->time_to_die - 1
 		&& !philos[i]->is_eating)
 	{
 		pthread_mutex_lock(&philos[i]->data->print_mutex);
-		printf("%ld %ld died\n", get_time_in_ms() - philos[i]->data->start_time,
-			philos[i]->id + 1);
+		printf("\033[0;31m%ld %ld died \033[0m\n", get_time_in_ms()
+			- philos[i]->data->start_time, philos[i]->id + 1);
 		philos[i]->data->simulation_end = true;
 		pthread_mutex_unlock(&philos[i]->data->print_mutex);
 		return (1);
