@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:33:48 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/16 08:14:13 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:30:00 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 static int	check_philosopher_death(t_philo **philos, size_t i)
 {
 	if (get_time_in_ms()
-		- philos[i]->last_meal_time > philos[i]->data->time_to_die - 1
-		&& !philos[i]->is_eating)
+		- get_last_meal_time(philos[i]) > philos[i]->data->time_to_die
+		&& !get_is_eating(philos[i]))
 	{
 		pthread_mutex_lock(&philos[i]->data->print_mutex);
-		printf("\033[0;31m%ld %ld died \033[0m\n", get_time_in_ms()
-			- philos[i]->data->start_time, philos[i]->id + 1);
-		philos[i]->data->simulation_end = true;
+		if (!get_simulation_end(philos[i]->data))
+		{
+			printf("\033[0;31m%ld %ld died \033[0m\n", get_time_in_ms()
+				- philos[i]->data->start_time, philos[i]->id + 1);
+			set_simulation_end(philos[i]->data, true);
+		}
 		pthread_mutex_unlock(&philos[i]->data->print_mutex);
 		return (1);
 	}
@@ -33,9 +36,12 @@ static int	check_all_philosophers_ate(t_philo **philos)
 	if (philos[0]->data->must_eat_count != -1)
 	{
 		pthread_mutex_lock(&philos[0]->data->print_mutex);
-		printf("All philosophers have eaten %d times\n",
-			philos[0]->data->must_eat_count);
-		philos[0]->data->simulation_end = true;
+		if (!get_simulation_end(philos[0]->data))
+		{
+			printf("All philosophers have eaten %d times\n",
+				philos[0]->data->must_eat_count);
+			set_simulation_end(philos[0]->data, true);
+		}
 		pthread_mutex_unlock(&philos[0]->data->print_mutex);
 		return (1);
 	}
@@ -49,7 +55,7 @@ void	*monitor(void *arg)
 	int		all_ate;
 
 	philos = (t_philo **)arg;
-	while (!philos[0]->data->simulation_end)
+	while (!get_simulation_end(philos[0]->data))
 	{
 		i = 0;
 		all_ate = 1;
@@ -58,7 +64,7 @@ void	*monitor(void *arg)
 			if (check_philosopher_death(philos, i))
 				return (NULL);
 			if (philos[i]->data->must_eat_count != -1
-				&& philos[i]->meals_eaten < philos[i]->data->must_eat_count)
+				&& get_meals_eaten(philos[i]) < philos[i]->data->must_eat_count)
 				all_ate = 0;
 			i++;
 		}
@@ -78,18 +84,18 @@ void	*routine(void *arg)
 	{
 		pthread_mutex_lock(philo->left_fork);
 		print_state(philo, "has taken a fork");
-		while (!philo->data->simulation_end)
+		while (!get_simulation_end(philo->data))
 			ft_sleep(100, philo->data);
 		pthread_mutex_unlock(philo->left_fork);
 		return (NULL);
 	}
 	if (philo->id % 2)
 		ft_sleep(10, philo->data);
-	while (!philo->data->simulation_end)
+	while (!get_simulation_end(philo->data))
 	{
 		take_forks(philo);
 		eat(philo);
-		if (philo->data->simulation_end)
+		if (get_simulation_end(philo->data))
 			break ;
 		sleep_and_think(philo);
 	}

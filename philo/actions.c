@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:40:43 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/16 08:17:31 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/17 13:07:56 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,16 @@ void	take_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	philo->is_eating = 1;
 	print_state(philo, "is eating");
+	pthread_mutex_lock(&philo->state_mutex);
+	philo->is_eating = 1;
 	philo->last_meal_time = get_time_in_ms();
+	pthread_mutex_unlock(&philo->state_mutex);
 	ft_sleep(philo->data->time_to_eat, philo->data);
+	pthread_mutex_lock(&philo->state_mutex);
 	philo->meals_eaten++;
 	philo->is_eating = 0;
+	pthread_mutex_unlock(&philo->state_mutex);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
@@ -69,12 +73,13 @@ void	cleanup(t_philo **philos, t_data *data)
 		i++;
 	}
 	pthread_mutex_destroy(&data->print_mutex);
-	free(data->forks);
 	i = 0;
 	while (i < data->nb_philos)
 	{
+		pthread_mutex_destroy(&philos[i]->state_mutex);
 		free(philos[i]);
 		i++;
 	}
+	free(data->forks);
 	free(philos);
 }

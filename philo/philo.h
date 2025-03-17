@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:46:36 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/15 11:49:14 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:57:14 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define PHILO_H
 
 # include <pthread.h>
+# include <stdatomic.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -31,7 +32,8 @@ typedef struct s_data
 	time_t			start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
-	bool			simulation_end;
+	pthread_mutex_t	state_mutex;
+	atomic_bool		simulation_end;
 }					t_data;
 
 typedef struct s_philo
@@ -44,6 +46,7 @@ typedef struct s_philo
 	t_data			*data;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	state_mutex;
 }					t_philo;
 
 /* Utils functions */
@@ -67,5 +70,15 @@ void				eat(t_philo *philo);
 void				sleep_and_think(t_philo *philo);
 void				print_state(t_philo *philo, char *state);
 void				cleanup(t_philo **philos, t_data *data);
+
+/*getters and setters */
+int					get_is_eating(t_philo *philo);
+int					get_meals_eaten(t_philo *philo);
+void				increment_meals_eaten(t_philo *philo);
+bool				get_simulation_end(t_data *data);
+void				set_simulation_end(t_data *data, bool value);
+void				set_last_meal_time(t_philo *philo, time_t time);
+void				set_is_eating(t_philo *philo, int value);
+time_t				get_last_meal_time(t_philo *philo);
 
 #endif

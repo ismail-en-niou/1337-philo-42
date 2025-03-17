@@ -12,7 +12,7 @@
 
 NAME = philo
 CC = cc 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fsanitize=thread
 
 GREEN = \033[0;32m
 YELLOW = \033[0;33m
@@ -23,7 +23,7 @@ RESET = \033[0m
 HEADERS = philo.h
 MAIN = philo.c
 
-SRC = atoi.c validInput.c inits.c actions.c utils.c
+SRC = atoi.c validInput.c inits.c actions.c utils.c getters.c setters.c
 OBJS = $(SRC:.c=.o)
 
 all: $(NAME)
@@ -35,7 +35,7 @@ $(NAME): $(MAIN) $(OBJS)
 %.o: %.c $(HEADERS)
 	@echo "\033[0;36m"
 	$(CC) $(FLAGS) -c $< -o $@
-	clear 
+
 
 clean:
 	@rm -rf $(OBJS)

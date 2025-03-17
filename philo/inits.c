@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:34:06 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/15 11:40:00 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/17 12:56:32 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_start(char **av)
 	data.time_to_eat = ft_atoi(av[3]);
 	data.time_to_sleep = ft_atoi(av[4]);
 	data.start_time = get_time_in_ms();
-	data.simulation_end = false;
+	atomic_init(&data.simulation_end, false);
 	if (av[5])
 		data.must_eat_count = ft_atoi(av[5]);
 	else
@@ -93,6 +93,8 @@ bool	ft_init_philos(t_philo **philos, t_data *data)
 		philos[i]->last_meal_time = get_time_in_ms();
 		philos[i]->left_fork = &data->forks[i];
 		philos[i]->right_fork = &data->forks[(i + 1) % data->nb_philos];
+		if (pthread_mutex_init(&philos[i]->state_mutex, NULL) != 0)
+			return (false);
 		i++;
 	}
 	return (true);
