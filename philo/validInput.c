@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:33:48 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/17 13:30:00 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:17:09 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ static int	check_philosopher_death(t_philo **philos, size_t i)
 
 static int	check_all_philosophers_ate(t_philo **philos)
 {
-	if (philos[0]->data->must_eat_count != -1)
+	if (get_must_eat_count(philos[0]->data) != -1)
 	{
 		pthread_mutex_lock(&philos[0]->data->print_mutex);
 		if (!get_simulation_end(philos[0]->data))
 		{
 			printf("All philosophers have eaten %d times\n",
-				philos[0]->data->must_eat_count);
+				get_must_eat_count(philos[0]->data));
 			set_simulation_end(philos[0]->data, true);
 		}
 		pthread_mutex_unlock(&philos[0]->data->print_mutex);
@@ -63,8 +63,8 @@ void	*monitor(void *arg)
 		{
 			if (check_philosopher_death(philos, i))
 				return (NULL);
-			if (philos[i]->data->must_eat_count != -1
-				&& get_meals_eaten(philos[i]) < philos[i]->data->must_eat_count)
+			if (get_must_eat_count(philos[i]->data) != -1
+				&& get_meals_eaten(philos[i]) < get_must_eat_count(philos[i]->data))
 				all_ate = 0;
 			i++;
 		}

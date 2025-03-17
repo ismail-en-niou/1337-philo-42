@@ -6,7 +6,7 @@
 /*   By: ien-niou <ien-niou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 11:46:36 by ien-niou          #+#    #+#             */
-/*   Updated: 2025/03/17 12:57:14 by ien-niou         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:54:29 by ien-niou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,7 @@ void				set_simulation_end(t_data *data, bool value);
 void				set_last_meal_time(t_philo *philo, time_t time);
 void				set_is_eating(t_philo *philo, int value);
 time_t				get_last_meal_time(t_philo *philo);
+int					get_must_eat_count(t_data *data);
+void				set_must_eat_count(t_data *data, int count);
 
 #endif
